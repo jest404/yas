@@ -78,7 +78,7 @@ def show_uuid(name=None):
     print(result.stdout if result.stdout else f"Swapfile {name} not found")
 
 def open_fstab():
-    subprocess.run("sudo micro /etc/fstab", shell=True)
+    subprocess.run("sudo nano /etc/fstab", shell=True)
 
 def enable_all():
     subprocess.run("sudo swapon -a", shell=True) #FIXME this should enable swapfiles
