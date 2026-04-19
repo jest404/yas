@@ -5,7 +5,16 @@
 # TODO replace all sudo calls with just hope of that user is running as su. This will allow users without SUDO use this script too. For example with doas.
 import subprocess
 import sys
+import os
 
+def root(func):
+    def wrapper():
+        if os.getuid() == 0:
+            fucn()
+        else:
+            print("You need to have root privileges to run this action.\nPlease try using 'sudo' or 'doas'.")
+    return wrapper
+        
 def print_commands():
     print("Select something:")
     print(" [1] - Create a new swapfile and enable it (require sudo)")
@@ -77,17 +86,20 @@ def show_uuid(name=None):
     result = subprocess.run(f"blkid {path}", shell=True, capture_output=True, text=True)
     print(result.stdout if result.stdout else f"Swapfile {name} not found")
 
+@root
 def open_fstab():
-    subprocess.run("sudo nano /etc/fstab", shell=True)
+    subprocess.run("nano /etc/fstab", shell=True)
 
+@root
 def enable_all():
-    subprocess.run("sudo swapon -a", shell=True) #FIXME this should enable swapfiles
+    subprocess.run("swapon -a", shell=True) #FIXME this should enable swapfiles
     print("All swaps enabled")
 
 def list_swaps():
     result = subprocess.run("swapon --show", shell=True, capture_output=True, text=True)
     print(result.stdout if result.stdout else "No active swaps")
 
+@root
 def disable_all():
     subprocess.run("sudo swapoff -a", shell=True)
     print("All swaps disabled")
