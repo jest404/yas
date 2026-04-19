@@ -2,7 +2,6 @@
 
 # GNU GPL 3.0, see license file for details
 # Author: Lohrrrr, Jester404
-# TODO replace all sudo calls with just hope of that user is running as su. This will allow users without SUDO use this script too. For example with doas.
 import subprocess
 import sys
 import os
